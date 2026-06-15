@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestGetApiKey(t *testing.T)  {
+func TestGetApiKey(t *testing.T) {
 	tests := []struct {
 		name          string
 		headers       http.Header

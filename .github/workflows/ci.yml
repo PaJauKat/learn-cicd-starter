@@ -20,3 +20,19 @@ jobs:
 
       - name: Viendo los Tests
         run: go test -cover ./...
+
+  style:
+    name: Style
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4 # Duplicado porque es otra máquina
+
+      - name: Set up Go
+        uses: actions/setup-go@v5 # Duplicado también
+        with:
+          go-version: "1.26.0"
+
+      - name: Formateando code
+        run: test -z $(go fmt ./...)
