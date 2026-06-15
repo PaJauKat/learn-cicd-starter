@@ -18,7 +18,7 @@ func TestGetApiKey(t *testing.T)  {
 			headers: http.Header{
 				"Authorization": []string{"ApiKey mi-token-secreto-123"},
 			},
-			expectedKey:   "mi-token-secreto-12",
+			expectedKey:   "mi-token-secreto-123",
 			expectedError: nil,
 		},
 		{
