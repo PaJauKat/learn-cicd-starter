@@ -20,3 +20,19 @@ jobs:
 
       - name: Build app
         run: ./scripts/buildprod.sh
+
+      # PASO 1: Autenticarse en Google Cloud (setup-gcloud)
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
+      # PASO 2: Configurar la herramienta gcloud CLI en GitHub
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          version: '>= 363.0.0'
+
+      # PASO 3: Compilar y subir la imagen usando TU comando real
+      - name: Build and Push Docker Image to Artifact Registry
+        run: gcloud builds submit --tag us-central1-docker.pkg.dev/notely-499608/notely-ar-repo/katita:latest .
