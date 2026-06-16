@@ -9,6 +9,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -17,6 +20,9 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version: "1.26.0"
+
+      - name: Instalar Goose
+        run: go install github.com/pressly/goose/v3/cmd/goose@latest
 
       - name: Build app
         run: ./scripts/buildprod.sh
@@ -36,6 +42,10 @@ jobs:
       # PASO 3: Compilar y subir la imagen usando TU comando real
       - name: Build and Push Docker Image to Artifact Registry
         run: gcloud builds submit --tag us-central1-docker.pkg.dev/notely-499608/notely-ar-repo/katita:latest .
+
+      # CORRER MIGRACIONES (Después del Build, antes del Deploy)
+      - name: Run Database Migrations
+        run: ./scripts/migrateup.sh # Revisa si tu script está en esta ruta exacta o pon la ruta correcta
       
       - name: Deploy to Cloud Run
         run: gcloud run deploy notely --image us-central1-docker.pkg.dev/notely-499608/notely-ar-repo/katita:latest --region us-central1 --allow-unauthenticated --project notely-499608 --max-instances=4
